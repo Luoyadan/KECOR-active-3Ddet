@@ -10,14 +10,17 @@
 
 
 
-This work is the official Pytorch implementation of our ICCV submission No. 4087: **KECOR: Kernel Coding Rate Maximization for Active 3D Object Detection**.
+This work is the official Pytorch implementation of our ICCV publication: **KECOR: Kernel Coding Rate Maximization for Active 3D Object Detection**.
 
+
+[[arXiv]](https://arxiv.org/abs/2301.09249) 
 
 ## Framework
 Achieving a reliable LiDAR-based object detector in autonomous driving is paramount, but its success hinges on obtaining large amounts of precise 3D annotations. Active learning (AL) seeks to mitigate the annotation burden through algorithms that use fewer labels and can attain performance comparable to fully supervised learning. Although AL has shown promise, current approaches prioritize the selection of unlabeled point clouds with high aleatoric and/or epistemic uncertainty, leading to the selection of more instances for labeling and reduced computational efficiency. In this paper, we resort to a novel kernel coding rate maximization (KECOR) strategy which aims to identify the most informative point clouds to acquire labels through the lens of information theory. Greedy search is applied to seek desired point clouds that can maximize the minimal number of bits required to encode the latent features. To determine the uniqueness and informativeness of the selected samples from the model perspective, we construct a proxy network of the 3D detector head and compute the outer product of Jacobians from all proxy layers to form the empirical neural tangent kernel (NTK) matrix. To accommodate both one-stage (i.e., SECOND) and two-stage detectors (i.e., PV-RCNN), we further incorporate the classification entropy maximization and well trade-off between detection performance and the total number of bounding boxes selected for annotation. Extensive experiments conducted on two 3D benchmarks and a 2D detection dataset evidence the superiority and versatility of the proposed approach. Our results show that approximately 44\% box-level annotation costs and 26\% computational time are reduced compared to the state-of-the-art AL method, without compromising detection performance.
 
 
 
+:fire: 08/13 updates: under development. Checkpoints will be uploaded soon. 
 
 ----
 ## Contents
@@ -206,3 +209,6 @@ You could optionally add extra command line parameters `--batch_size ${BATCH_SIZ
 ```shell script
 python train.py --cfg_file ${CONFIG_FILE}
 ```
+### Acknowledgement
+
+Part of code for NTK implementation is from [https://github.com/dholzmueller/bmdal_reg](https://github.com/dholzmueller/bmdal_reg)
