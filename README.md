@@ -201,6 +201,7 @@ We provide several options for active learning algorithms, including
 - learning loss [`llal`]
 - BADGE sampling [`badge`]
 - CRB sampling [`crb`]
+- Kecor sampling [`kecor`]
 
 
 You could optionally add extra command line parameters `--batch_size ${BATCH_SIZE}` and `--epochs ${EPOCHS}` to specify your preferred parameters. 
