@@ -5,8 +5,6 @@
 </p>
 
 -----------------------
-![visitor badge](https://visitor-badge.laobi.icu/badge?page_id=Luoyadan.KECOR-active-3Ddet&left_color=red&right_color=green&left_text=Hello%20Visitors)
-
 
 
 
