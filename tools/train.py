@@ -31,7 +31,7 @@ os.environ["CUDA_LAUNCH_BLOCKING"]="1"
 
 def parse_config():
     parser = argparse.ArgumentParser(description='arg parser')
-    parser.add_argument('--cfg_file', type=str, default='cfgs/active-kitti_models/pv_rcnn_active_random.yaml', help='specify the config for training')
+    parser.add_argument('--cfg_file', type=str, default='cfgs/active-kitti_models/pv_rcnn_active_kecor.yaml', help='specify the config for training')
 
     parser.add_argument('--batch_size', type=int, default=2, required=False, help='batch size for training')
     parser.add_argument('--epochs', type=int, default=None, required=False, help='number of epochs to train for')
@@ -124,7 +124,7 @@ def main():
         os.system('cp %s %s' % (args.cfg_file, output_dir))
 
 
-        wandb.init(project=cfg.DATA_CONFIG._BASE_CONFIG_.split('/')[-1].split('.')[0] + '_train', entity="user", tags=args.cfg_file.split('/')[-1].split('.')[0])
+        wandb.init(project=cfg.DATA_CONFIG._BASE_CONFIG_.split('/')[-1].split('.')[0] + '_train', entity="uqyluo", tags=args.cfg_file.split('/')[-1].split('.')[0])
         run_name_elements = [cfg.DATA_CONFIG._BASE_CONFIG_.split('/')[-1].split('.')[0]] + [cfg.TAG] + [cfg.ACTIVE_TRAIN.PRE_TRAIN_EPOCH_NUMS] + [cfg.ACTIVE_TRAIN.SELECT_LABEL_EPOCH_INTERVAL] + \
         [cfg.ACTIVE_TRAIN.PRE_TRAIN_SAMPLE_NUMS] + [cfg.ACTIVE_TRAIN.SELECT_NUMS] + [datetime.datetime.now().strftime('%Y%m%d-%H%M%S')]
         run_name_elements = '_'.join([str(i) for i in run_name_elements])

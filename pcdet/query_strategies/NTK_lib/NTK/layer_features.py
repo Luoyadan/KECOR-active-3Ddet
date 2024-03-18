@@ -4,33 +4,57 @@ from .feature_maps import *
 
 
 class LayerGradientComputation:
-
+    """
+    Abstract base class that can be used as a second base class
+    for layers that support the computation of gradient features
+    """
     def __init__(self, layer: nn.Module):
-
+        """
+        :param layer: Layer that this LayerGradientComputation computes gradients of.
+        """
         self.layers = [layer]  # dirty hack to avoid infinite recursion in PyTorch if layer is self.
         super().__init__()   # in case this is used with multiple inheritance
 
     def get_layer(self) -> nn.Module:
-
+        """
+        :return: Returns the layer that this LayerGradientComputation computes gradients of.
+        """
         return self.layers[0]
 
     def get_feature_map(self) -> FeatureMap:
-
+        """
+        :return: Returns a FeatureMap object that can compute feature map / kernel values
+        on the data provided by pop_feature_data()
+        """
         raise NotImplementedError()
 
     def before_forward(self) -> None:
-
+        """
+        Callback that is called before the data is passed through the model in a forward pass
+        and gradients are computed in a backward pass.
+        This method can be used to set up hooks that grab input data and gradients in both forward and backward pass.
+        """
         raise NotImplementedError()
 
     def pop_feature_data(self) -> FeatureData:
-
+        """
+        :return: This method should return the feature data
+        corresponding to the inputs that were last passed through the model.
+        This feature data should be usable by the feature map returned by get_feature_map()
+        """
         raise NotImplementedError()
 
 
 class ModelGradTransform(DataTransform):
-
+    """
+    A DataTransform object that passes data through a NN model
+    in order to obtain feature data corresponding to gradients
+    """
     def __init__(self, model: nn.Module, grad_layers: List[LayerGradientComputation]):
-
+        """
+        :param model: The model to be computed gradients of
+        :param grad_layers: All layers of the model whose parameters we want to compute gradients of
+        """
         self.model = model
         self.grad_layers = grad_layers
         self.requires_grad_list = [any([any([p is gl_p for gl_p in gl.get_layer().parameters()]) for gl in grad_layers])
@@ -38,7 +62,11 @@ class ModelGradTransform(DataTransform):
         self.grad_params = [p for grad_layer in grad_layers for p in grad_layer.get_layer().parameters()]
 
     def forward(self, feature_data: FeatureData, idxs: Indexes) -> FeatureData:
-
+        """
+        :param feature_data: Feature data to be passed through the model
+        :param idxs: indexes of the feature data that should be passed through the model
+        :return: feature data provided by the layers
+        """
         for grad_layer in self.grad_layers:
             grad_layer.before_forward()
 
@@ -149,4 +177,42 @@ class GeneralLinearGradientComputation(LayerGradientComputation):
         self._grad_output_data = None
 
         return fd
+
+
+class LinearGradientComputation(GeneralLinearGradientComputation):
+    """
+    This class implements a gradient computation for nn.Linear layers.
+    """
+    def __init__(self, layer: nn.Linear):
+        super().__init__(layer=layer, in_features=layer.in_features, out_features=layer.out_features)
+
+
+class LinearLayer(GeneralLinearGradientComputation, nn.Module):
+    """
+    Linear layer that implements LayerGradientFeatures, i.e., it can be used for computing gradient-based kernels.
+    This linear layer does not initialize weight and bias itself,
+    instead it assumes that they are passed as arguments to the constructor.
+    It can also be used with the Neural Tangent Parameterization since it includes a weight factor and bias factor.
+    (These are called sigma_w and sigma_b in the paper.)
+    """
+    def __init__(self, weight: torch.Tensor, bias: torch.Tensor, weight_factor: float, bias_factor: float):
+        """
+        :param weight: Weight matrix parameter of shape [in_features, out_features].
+        Compared to torch.nn.Linear, this is transposed.
+        :param bias: Bias parameter of shape [out_features]
+        :param weight_factor: Factor sigma_w by which the weight matrix is multiplied in the forward pass.
+        :param bias_factor: Factor sigma_w by which the bias is multiplied in the forward pass.
+        """
+        super().__init__(self, in_features=weight.shape[0], out_features=weight.shape[1],
+                         weight_factor=weight_factor, bias_factor=bias_factor)
+        self.weight = nn.Parameter(weight)
+        self.bias = nn.Parameter(bias)
+        self.weight_factor = weight_factor
+        self.bias_factor = bias_factor
+
+    def forward(self, x: torch.Tensor):
+        return self.weight_factor * x.matmul(self.weight) + self.bias_factor * self.bias
+
+
+
 

@@ -52,7 +52,7 @@ class BatchSelectorImpl:
             use_float64 = (selection_method in ['maxdet', 'bait'])
 
             for tfm_name, tfm_args in kernel_transforms:
-                if tfm_name in ['train', 'pool', 'acs-rf', 'acs-rf-hyper', 'acs-grad']:
+                if tfm_name in ['train', 'pool']:
                     use_float64 = True
         else:
             use_float64 = False
@@ -63,14 +63,19 @@ class BatchSelectorImpl:
         kernel_timer = utils.Timer()
         kernel_timer.start()
 
-        if base_kernel == 'ntk':  # KECOR
-            feature_maps = [ReLUNTKFeatureMap(n_layers=config.get('n_ntk_layers', len([
-                l for l in model.modules() if isinstance(l, LayerGradientComputation)])),
-                                              sigma_w_sq=config.get('weight_gain', 0.4)**2,
-                                              sigma_b_sq=config.get('sigma_b', 0.0)**2) for model in self.models]
-            if use_float64:
-                self.to_float64()
-        elif base_kernel == 'last':  # KECOR-LAST
+        if base_kernel == 'ntk':  # kecor
+            feature_maps = [] 
+            grad_dict = config.get('layer_grad_dict', {nn.Linear: LinearGradientComputation})
+            for model in self.models:
+                grad_layers = []
+                for layer in model.modules():
+                    if isinstance(layer, LayerGradientComputation):
+                        grad_layers.append(layer)
+                    elif type(layer) in grad_dict:
+                        grad_layers.append(grad_dict[type(layer)](layer))
+                feature_maps.append(create_grad_feature_map(model, grad_layers, use_float64=use_float64))
+            
+        elif base_kernel == 'll':  # data -> features
             n_last_layers = config.get('n_last_layers', 1)
             feature_maps = []
             grad_dict = config.get('layer_grad_dict', {nn.Linear: LinearGradientComputation})
@@ -83,11 +88,11 @@ class BatchSelectorImpl:
                         grad_layers.append(grad_dict[type(layer)](layer))
                 feature_maps.append(create_grad_feature_map(model, grad_layers[-n_last_layers:],
                                                             use_float64=use_float64))
-        elif base_kernel == 'linear': # KECOR-LINEAR
+        elif base_kernel == 'linear':
             feature_maps = [IdentityFeatureMap(n_features=self.data['train'].get_tensor(0).shape[-1]) for model in self.models]
             if use_float64:
                 self.to_float64()
-        elif base_kernel == 'laplace': # # KECOR-RBF
+        elif base_kernel == 'laplace':
             feature_maps = [LaplaceKernelFeatureMap(scale=config.get('laplace_scale', 1.0)) for model in self.models]
             if use_float64:
                 self.to_float64()
@@ -96,8 +101,8 @@ class BatchSelectorImpl:
 
         self.features = {key: [Features(fm, feature_data) for fm in feature_maps]
                          for key, feature_data in self.data.items()}
-
-        if base_kernel in ['last', 'grad']:
+        
+        if base_kernel in ['ll', 'ntk']:
             for i in range(self.n_models):
                 # use smaller batch size for NN evaluation
                 self.apply_tfm(i, BatchTransform(batch_size=nn_batch_size))
@@ -115,6 +120,18 @@ class BatchSelectorImpl:
                     if len(args) >= 2:
                         self.apply_tfm(i, self.features['pool'][i].scale_tfm(factor=args[1]))
                     self.apply_tfm(i, self.features['pool'][i].posterior_tfm(args[0], **config))
+            elif tfm_name == 'scale':
+                for i in range(self.n_models):
+                    self.apply_tfm(i, PrecomputeTransform(batch_size=precomp_batch_size))
+                    self.apply_tfm(i, self.features['train'][i].scale_tfm(*args))
+            elif tfm_name == 'rp':
+                # don't precompute before random projections
+                # since we might want to jointly forward through the model and project in batches
+                # otherwise we might use more memory than needed
+                for i in range(self.n_models):
+                    self.apply_tfm(i, self.features['train'][i].sketch_tfm(*args, **config))
+            elif tfm_name == 'ens':
+                self.ensemble()
             else:
                 raise ValueError(f'Unknown kernel transform "{tfm_name}"')
 

@@ -116,7 +116,7 @@ class KECORSampling(Strategy):
         if self.rank == 0:
             pbar.close()
 
-        print('** NTK start searching...**')# 100 * 32768
+        print('** NTK start searching...**') # 100 * 32768
         labeled_embeddings = torch.cat(labeled_embeddings, 0)
         labeled_embeddings = labeled_embeddings.view(labeled_embeddings.shape[0], -1)
         unlabeled_embeddings = torch.cat(unlabeled_embeddings, 0)
@@ -135,7 +135,7 @@ class KECORSampling(Strategy):
             y_pred = custom_model(labeled_embeddings)
             loss = ((y_pred - y_train)**2).mean()
             train_rmse = loss.sqrt().item()
-            print(f'train RMSE: {train_rmse:5.3f}')
+            # print(f'train RMSE: {train_rmse:5.3f}')
             loss.backward()
             opt.step()
             opt.zero_grad()

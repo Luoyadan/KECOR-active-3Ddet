@@ -24,7 +24,7 @@ os.environ["CUDA_LAUNCH_BLOCKING"]="1"
 
 def parse_config():
     parser = argparse.ArgumentParser(description='arg parser')
-    parser.add_argument('--cfg_file', type=str, default='cfgs/active-kitti_models/pv_rcnn_active_random.yaml', help='specify the config for training')
+    parser.add_argument('--cfg_file', type=str, default='cfgs/active-kitti_models/pv_rcnn_active_kecor.yaml', help='specify the config for training')
 
     parser.add_argument('--batch_size', type=int, default=4, required=False, help='batch size for training') 
     parser.add_argument('--workers', type=int, default=4, help='number of workers for dataloader')
@@ -102,9 +102,9 @@ def repeat_eval_ckpt(model, test_loader, args, eval_output_dir, logger, ckpt_dir
     if cfg.LOCAL_RANK == 0:
         tb_log = SummaryWriter(log_dir=str(eval_output_dir / ('tensorboard_%s' % cfg.DATA_CONFIG.DATA_SPLIT['test'])))
         if cfg.DATA_CONFIG._BASE_CONFIG_.split('/')[-1].split('.')[0] == 'waymo_dataset':
-            wandb.init(project=cfg.DATA_CONFIG._BASE_CONFIG_.split('/')[-1].split('.')[0] + '_test_select-{}'.format(cfg.ACTIVE_TRAIN.SELECT_NUMS), entity='user')
+            wandb.init(project=cfg.DATA_CONFIG._BASE_CONFIG_.split('/')[-1].split('.')[0] + '_test_select-{}'.format(cfg.ACTIVE_TRAIN.SELECT_NUMS), entity='uqyluo')
         elif cfg.DATA_CONFIG._BASE_CONFIG_.split('/')[-1].split('.')[0] == 'kitti_dataset':
-            wandb.init(project=cfg.DATA_CONFIG._BASE_CONFIG_.split('/')[-1].split('.')[0] + '_test_select-{}'.format(cfg.ACTIVE_TRAIN.SELECT_NUMS), entity='user')
+            wandb.init(project=cfg.DATA_CONFIG._BASE_CONFIG_.split('/')[-1].split('.')[0] + '_test_select-{}'.format(cfg.ACTIVE_TRAIN.SELECT_NUMS), entity='uqyluo')
         else:
             raise NotImplementedError
         run_name_elements = [cfg.DATA_CONFIG._BASE_CONFIG_.split('/')[-1].split('.')[0]] + ['backbone' if args.eval_backbone else cfg.TAG] + [cfg.ACTIVE_TRAIN.PRE_TRAIN_EPOCH_NUMS] + [cfg.ACTIVE_TRAIN.SELECT_LABEL_EPOCH_INTERVAL] + [cfg.ACTIVE_TRAIN.PRE_TRAIN_SAMPLE_NUMS] + [cfg.ACTIVE_TRAIN.SELECT_NUMS]
