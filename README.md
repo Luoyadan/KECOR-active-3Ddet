@@ -5,7 +5,7 @@
 </p>
 
 -----------------------
-
+<img src="https://visitor-badge.laobi.icu/badge?page_id=Luoyadan.KECOR-active-3Ddet" />
 
 
 
@@ -15,14 +15,35 @@ This work is the official Pytorch implementation of our ICCV publication: **KECO
 
 [[arXiv]](https://arxiv.org/abs/2301.09249) 
 
-* Update: The checkpoints can be found via [https://drive.google.com/drive/folders/1xbEI3tSfTCHIt3m8tk4hAy4qBJ55NuqL?usp=sharing](https://drive.google.com/drive/folders/1xbEI3tSfTCHIt3m8tk4hAy4qBJ55NuqL?usp=sharing)
+## News
+:fire: 08/13 updates: under development. Checkpoints will be uploaded soon. 
+
+:fire: 03/18 updates: The checkpoints can be found via [https://drive.google.com/drive/folders/1xbEI3tSfTCHIt3m8tk4hAy4qBJ55NuqL?usp=sharing](https://drive.google.com/drive/folders/1xbEI3tSfTCHIt3m8tk4hAy4qBJ55NuqL?usp=sharing)
+
+
+## Citation
+```
+@inproceedings{DBLP:conf/iccv/LuoCF0BH23,
+  author       = {Yadan Luo and
+                  Zhuoxiao Chen and
+                  Zhen Fang and
+                  Zheng Zhang and
+                  Mahsa Baktashmotlagh and
+                  Zi Huang},
+  title        = {Kecor: Kernel Coding Rate Maximization for Active 3D Object Detection},
+  booktitle    = {{IEEE/CVF} International Conference on Computer Vision, {ICCV} 2023, Paris, France, October 1-6, 2023},
+  pages        = {18233--18244},
+  publisher    = {{IEEE}},
+  year         = {2023}
+}
+```
 
 ## Framework
 Achieving a reliable LiDAR-based object detector in autonomous driving is paramount, but its success hinges on obtaining large amounts of precise 3D annotations. Active learning (AL) seeks to mitigate the annotation burden through algorithms that use fewer labels and can attain performance comparable to fully supervised learning. Although AL has shown promise, current approaches prioritize the selection of unlabeled point clouds with high aleatoric and/or epistemic uncertainty, leading to the selection of more instances for labeling and reduced computational efficiency. In this paper, we resort to a novel kernel coding rate maximization (KECOR) strategy which aims to identify the most informative point clouds to acquire labels through the lens of information theory. Greedy search is applied to seek desired point clouds that can maximize the minimal number of bits required to encode the latent features. To determine the uniqueness and informativeness of the selected samples from the model perspective, we construct a proxy network of the 3D detector head and compute the outer product of Jacobians from all proxy layers to form the empirical neural tangent kernel (NTK) matrix. To accommodate both one-stage (i.e., SECOND) and two-stage detectors (i.e., PV-RCNN), we further incorporate the classification entropy maximization and well trade-off between detection performance and the total number of bounding boxes selected for annotation. Extensive experiments conducted on two 3D benchmarks and a 2D detection dataset evidence the superiority and versatility of the proposed approach. Our results show that approximately 44\% box-level annotation costs and 26\% computational time are reduced compared to the state-of-the-art AL method, without compromising detection performance.
 
 
 
-:fire: 08/13 updates: under development. Checkpoints will be uploaded soon. 
+
 
 ----
 ## Contents
@@ -71,7 +92,7 @@ Currently we provide the dataloader of KITTI dataset and Waymo dataset, and the 
 * NOTE: if you already have the data infos from `pcdet v0.1`, you can choose to use the old infos and set the DATABASE_WITH_FAKELIDAR option in tools/cfgs/dataset_configs/kitti_dataset.yaml as True. The second choice is that you can create the infos and gt database again and leave the config unchanged.
 
 ```
-CRB-active-3Ddet
+KECOR-active-3Ddet
 ├── data
 │   ├── kitti
 │   │   │── ImageSets
@@ -92,7 +113,7 @@ python -m pcdet.datasets.kitti.kitti_dataset create_kitti_infos tools/cfgs/datas
 * Please download the official [NuScenes 3D object detection dataset](https://www.nuscenes.org/download) and 
 organize the downloaded files as follows: 
 ```
-CRB-active-3Ddet
+KECOR-active-3Ddet
 ├── data
 │   ├── nuscenes
 │   │   │── v1.0-trainval (or v1.0-mini if you use mini)
@@ -122,7 +143,7 @@ including the training data `training_0000.tar~training_0031.tar` and the valida
 data `validation_0000.tar~validation_0007.tar`.
 * Unzip all the above `xxxx.tar` files to the directory of `data/waymo/raw_data` as follows (You could get 798 *train* tfrecord and 202 *val* tfrecord ):  
 ```
-CRB-active-3Ddet
+KECOR-active-3Ddet
 ├── data
 │   ├── waymo
 │   │   │── ImageSets
