@@ -15,6 +15,8 @@ This work is the official Pytorch implementation of our ICCV publication: **KECO
 [[ICCV Page]](https://openaccess.thecvf.com/content/ICCV2023/html/Luo_KECOR_Kernel_Coding_Rate_Maximization_for_Active_3D_Object_Detection_ICCV_2023_paper.html) [[arXiv]](https://arxiv.org/abs/2301.09249) [[Supp]](https://openaccess.thecvf.com/content/ICCV2023/supplemental/Luo_KECOR_Kernel_Coding_ICCV_2023_supplemental.pdf)
 
 ## News
+:fire: 05/28 updates: a bug in SECOND-IoU fixed; will upload all vis data today.
+
 :fire: 08/13 updates: under development. Checkpoints will be uploaded soon. 
 
 :fire: 03/18 updates: The checkpoints can be found via [https://drive.google.com/drive/folders/1xbEI3tSfTCHIt3m8tk4hAy4qBJ55NuqL?usp=sharing](https://drive.google.com/drive/folders/1xbEI3tSfTCHIt3m8tk4hAy4qBJ55NuqL?usp=sharing)
@@ -225,6 +227,7 @@ We provide several options for active learning algorithms, including
 - CRB sampling [`crb`]
 - Kecor sampling [`kecor`]
 
+To add your own AL algorithm, please simply add a function under `pcdet/query_strategies`
 
 You could optionally add extra command line parameters `--batch_size ${BATCH_SIZE}` and `--epochs ${EPOCHS}` to specify your preferred parameters. 
 

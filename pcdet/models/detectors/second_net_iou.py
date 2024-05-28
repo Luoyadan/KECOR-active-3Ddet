@@ -18,7 +18,12 @@ class SECONDNetIoU(Detector3DTemplate):
             loss, tb_dict, disp_dict = self.get_training_loss()
 
             ret_dict = {
-                'loss': loss
+                'loss': loss,
+                'rcnn_reg_gt': self.roi_head.forward_ret_dict['rcnn_reg_gt'],
+                'rcnn_cls_gt': self.roi_head.forward_ret_dict['rcnn_cls_labels'],
+                'rcnn_cls': batch_dict['rcnn_cls'],
+                'rcnn_reg': batch_dict['rcnn_reg'],
+                'rpn_preds': batch_dict['rpn_preds']
             }
             return ret_dict, tb_dict, disp_dict
         else:

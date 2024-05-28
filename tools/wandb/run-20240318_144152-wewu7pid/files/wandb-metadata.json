@@ -1,0 +1,169 @@
+{
+    "os": "Linux-5.4.0-150-generic-x86_64-with-glibc2.17",
+    "python": "3.8.16",
+    "heartbeatAt": "2024-03-18T04:41:53.035171",
+    "startedAt": "2024-03-18T04:41:52.172986",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/uqyluo/github/KECOR-active-3Ddet/tools/test.py",
+    "codePath": "tools/test.py",
+    "git": {
+        "remote": "https://github.com/Luoyadan/KECOR-active-3Ddet.git",
+        "commit": "6f409ad3002b90c4d72822313d7ab7e98721ac3d"
+    },
+    "email": "lyadanluol@gmail.com",
+    "root": "/home/uqyluo/github/KECOR-active-3Ddet",
+    "host": "gs618-8997",
+    "username": "uqyluo",
+    "executable": "/home/uqyluo/anaconda3/envs/active-3d/bin/python",
+    "cpu_count": 12,
+    "cpu_count_logical": 24,
+    "cpu_freq": {
+        "current": 3350.931875,
+        "min": 2200.0,
+        "max": 4000.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2398.861,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2903.686,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4187.274,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4171.3,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4179.264,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4177.0,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2390.992,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2796.694,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4167.267,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2387.628,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4178.992,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2250.549,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2864.867,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2658.598,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4179.986,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4177.319,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4183.303,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4177.466,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2382.004,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2718.356,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4177.094,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2266.88,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4175.694,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2271.291,
+            "min": 2200.0,
+            "max": 4000.0
+        }
+    ],
+    "disk": {
+        "total": 937.3305015563965,
+        "used": 509.8457908630371
+    },
+    "gpu": "NVIDIA RTX A6000",
+    "gpu_count": 2,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA RTX A6000",
+            "memory_total": 51527024640
+        },
+        {
+            "name": "NVIDIA RTX A6000",
+            "memory_total": 51527024640
+        }
+    ],
+    "memory": {
+        "total": 251.6110954284668
+    }
+}

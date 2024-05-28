@@ -1,0 +1,505 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    python_version: 3.8.16
+    cli_version: 0.15.3
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1710736097.304149
+    t:
+      1:
+      - 1
+      - 41
+      - 55
+      2:
+      - 1
+      - 41
+      - 55
+      3:
+      - 17
+      - 23
+      - 37
+      4: 3.8.16
+      5: 0.15.3
+      8:
+      - 5
+cfg_file:
+  desc: null
+  value: cfgs/active-kitti_models/pv_rcnn_active_kecor.yaml
+batch_size:
+  desc: null
+  value: 4
+workers:
+  desc: null
+  value: 4
+extra_tag:
+  desc: null
+  value: select-100
+ckpt:
+  desc: null
+  value: null
+launcher:
+  desc: null
+  value: none
+tcp_port:
+  desc: null
+  value: 18888
+local_rank:
+  desc: null
+  value: 0
+set_cfgs:
+  desc: null
+  value: null
+max_waiting_mins:
+  desc: null
+  value: 0
+start_epoch:
+  desc: null
+  value: 0
+eval_tag:
+  desc: null
+  value: default
+eval_all:
+  desc: null
+  value: true
+eval_backbone:
+  desc: null
+  value: false
+ckpt_dir:
+  desc: null
+  value: null
+save_to_file:
+  desc: null
+  value: false
+ROOT_DIR:
+  desc: null
+  value: /home/uqyluo/github/KECOR-active-3Ddet
+LOCAL_RANK:
+  desc: null
+  value: 0
+CLASS_NAMES:
+  desc: null
+  value:
+  - Car
+  - Pedestrian
+  - Cyclist
+DATA_CONFIG:
+  desc: null
+  value:
+    DATASET: KittiDataset
+    DATA_PATH: ../data/kitti
+    POINT_CLOUD_RANGE:
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    DATA_SPLIT:
+      train: train
+      test: val
+    INFO_PATH:
+      train:
+      - kitti_infos_train.pkl
+      test:
+      - kitti_infos_val.pkl
+    GET_ITEM_LIST:
+    - points
+    FOV_POINTS_ONLY: true
+    DATA_AUGMENTOR:
+      DISABLE_AUG_LIST:
+      - place_holder
+      AUG_CONFIG_LIST:
+      - NAME: gt_sampling
+        USE_ROAD_PLANE: true
+        DB_INFO_PATH:
+        - kitti_dbinfos_train.pkl
+        PREPARE:
+          filter_by_min_points:
+          - Car:5
+          - Pedestrian:5
+          - Cyclist:5
+          filter_by_difficulty:
+          - -1
+        SAMPLE_GROUPS:
+        - Car:15
+        - Pedestrian:10
+        - Cyclist:10
+        NUM_POINT_FEATURES: 4
+        DATABASE_WITH_FAKELIDAR: false
+        REMOVE_EXTRA_WIDTH:
+        - 0.0
+        - 0.0
+        - 0.0
+        LIMIT_WHOLE_SCENE: false
+      - NAME: random_world_flip
+        ALONG_AXIS_LIST:
+        - x
+      - NAME: random_world_rotation
+        WORLD_ROT_ANGLE:
+        - -0.78539816
+        - 0.78539816
+      - NAME: random_world_scaling
+        WORLD_SCALE_RANGE:
+        - 0.95
+        - 1.05
+    POINT_FEATURE_ENCODING:
+      encoding_type: absolute_coordinates_encoding
+      used_feature_list:
+      - x
+      - y
+      - z
+      - intensity
+      src_feature_list:
+      - x
+      - y
+      - z
+      - intensity
+    DATA_PROCESSOR:
+    - NAME: mask_points_and_boxes_outside_range
+      REMOVE_OUTSIDE_BOXES: true
+    - NAME: shuffle_points
+      SHUFFLE_ENABLED:
+        train: true
+        test: false
+    - NAME: transform_points_to_voxels
+      VOXEL_SIZE:
+      - 0.05
+      - 0.05
+      - 0.1
+      MAX_POINTS_PER_VOXEL: 5
+      MAX_NUMBER_OF_VOXELS:
+        train: 16000
+        test: 40000
+    _BASE_CONFIG_: cfgs/dataset_configs/kitti_dataset.yaml
+MODEL:
+  desc: null
+  value:
+    NAME: PVRCNN
+    VFE:
+      NAME: MeanVFE
+    BACKBONE_3D:
+      NAME: VoxelBackBone8x
+    MAP_TO_BEV:
+      NAME: HeightCompression
+      NUM_BEV_FEATURES: 256
+    BACKBONE_2D:
+      NAME: BaseBEVBackbone
+      LAYER_NUMS:
+      - 5
+      - 5
+      LAYER_STRIDES:
+      - 1
+      - 2
+      NUM_FILTERS:
+      - 128
+      - 256
+      UPSAMPLE_STRIDES:
+      - 1
+      - 2
+      NUM_UPSAMPLE_FILTERS:
+      - 256
+      - 256
+    DENSE_HEAD:
+      NAME: AnchorHeadSingle
+      CLASS_AGNOSTIC: false
+      USE_DIRECTION_CLASSIFIER: true
+      DIR_OFFSET: 0.78539
+      DIR_LIMIT_OFFSET: 0.0
+      NUM_DIR_BINS: 2
+      ANCHOR_GENERATOR_CONFIG:
+      - class_name: Car
+        anchor_sizes:
+        - - 3.9
+          - 1.6
+          - 1.56
+        anchor_rotations:
+        - 0
+        - 1.57
+        anchor_bottom_heights:
+        - -1.78
+        align_center: false
+        feature_map_stride: 8
+        matched_threshold: 0.6
+        unmatched_threshold: 0.45
+      - class_name: Pedestrian
+        anchor_sizes:
+        - - 0.8
+          - 0.6
+          - 1.73
+        anchor_rotations:
+        - 0
+        - 1.57
+        anchor_bottom_heights:
+        - -0.6
+        align_center: false
+        feature_map_stride: 8
+        matched_threshold: 0.5
+        unmatched_threshold: 0.35
+      - class_name: Cyclist
+        anchor_sizes:
+        - - 1.76
+          - 0.6
+          - 1.73
+        anchor_rotations:
+        - 0
+        - 1.57
+        anchor_bottom_heights:
+        - -0.6
+        align_center: false
+        feature_map_stride: 8
+        matched_threshold: 0.5
+        unmatched_threshold: 0.35
+      TARGET_ASSIGNER_CONFIG:
+        NAME: AxisAlignedTargetAssigner
+        POS_FRACTION: -1.0
+        SAMPLE_SIZE: 512
+        NORM_BY_NUM_EXAMPLES: false
+        MATCH_HEIGHT: false
+        BOX_CODER: ResidualCoder
+      LOSS_CONFIG:
+        LOSS_WEIGHTS:
+          cls_weight: 1.0
+          loc_weight: 2.0
+          dir_weight: 0.2
+          code_weights:
+          - 1.0
+          - 1.0
+          - 1.0
+          - 1.0
+          - 1.0
+          - 1.0
+          - 1.0
+    PFE:
+      NAME: VoxelSetAbstraction
+      POINT_SOURCE: raw_points
+      NUM_KEYPOINTS: 2048
+      NUM_OUTPUT_FEATURES: 128
+      SAMPLE_METHOD: FPS
+      FEATURES_SOURCE:
+      - bev
+      - x_conv1
+      - x_conv2
+      - x_conv3
+      - x_conv4
+      - raw_points
+      SA_LAYER:
+        raw_points:
+          MLPS:
+          - - 4
+            - 16
+            - 16
+          - - 4
+            - 16
+            - 16
+          POOL_RADIUS:
+          - 0.4
+          - 0.8
+          NSAMPLE:
+          - 16
+          - 16
+        x_conv1:
+          DOWNSAMPLE_FACTOR: 1
+          MLPS:
+          - - 19
+            - 16
+            - 16
+          - - 19
+            - 16
+            - 16
+          POOL_RADIUS:
+          - 0.4
+          - 0.8
+          NSAMPLE:
+          - 16
+          - 16
+        x_conv2:
+          DOWNSAMPLE_FACTOR: 2
+          MLPS:
+          - - 35
+            - 32
+            - 32
+          - - 35
+            - 32
+            - 32
+          POOL_RADIUS:
+          - 0.8
+          - 1.2
+          NSAMPLE:
+          - 16
+          - 32
+        x_conv3:
+          DOWNSAMPLE_FACTOR: 4
+          MLPS:
+          - - 67
+            - 64
+            - 64
+          - - 67
+            - 64
+            - 64
+          POOL_RADIUS:
+          - 1.2
+          - 2.4
+          NSAMPLE:
+          - 16
+          - 32
+        x_conv4:
+          DOWNSAMPLE_FACTOR: 8
+          MLPS:
+          - - 67
+            - 64
+            - 64
+          - - 67
+            - 64
+            - 64
+          POOL_RADIUS:
+          - 2.4
+          - 4.8
+          NSAMPLE:
+          - 16
+          - 32
+    POINT_HEAD:
+      NAME: PointHeadSimple
+      CLS_FC:
+      - 256
+      - 256
+      CLASS_AGNOSTIC: true
+      USE_POINT_FEATURES_BEFORE_FUSION: true
+      TARGET_CONFIG:
+        GT_EXTRA_WIDTH:
+        - 0.2
+        - 0.2
+        - 0.2
+      LOSS_CONFIG:
+        LOSS_REG: smooth-l1
+        LOSS_WEIGHTS:
+          point_cls_weight: 1.0
+    ROI_HEAD:
+      NAME: PVRCNNHead
+      CLASS_AGNOSTIC: true
+      EMBEDDING_REQUIRED: true
+      SHARED_FC:
+      - 256
+      - 256
+      CLS_FC:
+      - 256
+      - 256
+      REG_FC:
+      - 256
+      - 256
+      DP_RATIO: 0.3
+      NMS_CONFIG:
+        TRAIN:
+          NMS_TYPE: nms_gpu
+          MULTI_CLASSES_NMS: false
+          NMS_PRE_MAXSIZE: 9000
+          NMS_POST_MAXSIZE: 512
+          NMS_THRESH: 0.8
+        TEST:
+          NMS_TYPE: nms_gpu
+          MULTI_CLASSES_NMS: false
+          NMS_PRE_MAXSIZE: 1024
+          NMS_POST_MAXSIZE: 128
+          NMS_THRESH: 0.7
+      ROI_GRID_POOL:
+        GRID_SIZE: 6
+        MLPS:
+        - - 131
+          - 64
+          - 64
+        - - 131
+          - 64
+          - 64
+        POOL_RADIUS:
+        - 0.8
+        - 1.6
+        NSAMPLE:
+        - 16
+        - 16
+        POOL_METHOD: max_pool
+      TARGET_CONFIG:
+        BOX_CODER: ResidualCoder
+        ROI_PER_IMAGE: 128
+        FG_RATIO: 0.5
+        SAMPLE_ROI_BY_EACH_CLASS: true
+        CLS_SCORE_TYPE: roi_iou
+        CLS_FG_THRESH: 0.75
+        CLS_BG_THRESH: 0.25
+        CLS_BG_THRESH_LO: 0.1
+        HARD_BG_RATIO: 0.8
+        REG_FG_THRESH: 0.55
+      LOSS_CONFIG:
+        CLS_LOSS: BinaryCrossEntropy
+        REG_LOSS: smooth-l1
+        CORNER_LOSS_REGULARIZATION: true
+        LOSS_WEIGHTS:
+          rcnn_cls_weight: 1.0
+          rcnn_reg_weight: 1.0
+          rcnn_corner_weight: 1.0
+          code_weights:
+          - 1.0
+          - 1.0
+          - 1.0
+          - 1.0
+          - 1.0
+          - 1.0
+          - 1.0
+    POST_PROCESSING:
+      RECALL_THRESH_LIST:
+      - 0.3
+      - 0.5
+      - 0.7
+      SCORE_THRESH: 0.1
+      OUTPUT_RAW_SCORE: false
+      EVAL_METRIC: kitti
+      NMS_CONFIG:
+        MULTI_CLASSES_NMS: false
+        NMS_TYPE: nms_gpu
+        NMS_THRESH: 0.1
+        NMS_PRE_MAXSIZE: 4096
+        NMS_POST_MAXSIZE: 500
+OPTIMIZATION:
+  desc: null
+  value:
+    OPTIMIZER: adam_onecycle
+    NUM_EPOCHS: 60
+    LR: 0.01
+    WEIGHT_DECAY: 0.01
+    MOMENTUM: 0.9
+    MOMS:
+    - 0.95
+    - 0.85
+    PCT_START: 0.4
+    DIV_FACTOR: 10
+    DECAY_STEP_LIST:
+    - 35
+    - 45
+    LR_DECAY: 0.1
+    LR_CLIP: 1.0e-07
+    LR_WARMUP: false
+    WARMUP_EPOCH: 1
+    GRAD_NORM_CLIP: 10
+ACTIVE_TRAIN:
+  desc: null
+  value:
+    METHOD: kecor
+    AGGREGATION: mean
+    PRE_TRAIN_SAMPLE_NUMS: 100
+    PRE_TRAIN_EPOCH_NUMS: 40
+    TRAIN_RESUME: true
+    SELECT_NUMS: 100
+    SELECT_LABEL_EPOCH_INTERVAL: 40
+    TOTAL_BUDGET_NUMS: 600
+    SELECTION_METHOD: maxdet
+    BASE_KERNEL: ntk
+    LATENT_DIM: 512
+    ENT_SIGMA: 0.1
+TAG:
+  desc: null
+  value: pv_rcnn_active_kecor
+EXP_GROUP_PATH:
+  desc: null
+  value: active-kitti_models

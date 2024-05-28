@@ -1,0 +1,169 @@
+{
+    "os": "Linux-5.4.0-150-generic-x86_64-with-glibc2.17",
+    "python": "3.8.16",
+    "heartbeatAt": "2024-03-18T04:33:40.711568",
+    "startedAt": "2024-03-18T04:33:39.842806",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/uqyluo/github/KECOR-active-3Ddet/tools/test.py",
+    "codePath": "tools/test.py",
+    "git": {
+        "remote": "https://github.com/Luoyadan/KECOR-active-3Ddet.git",
+        "commit": "6f409ad3002b90c4d72822313d7ab7e98721ac3d"
+    },
+    "email": "lyadanluol@gmail.com",
+    "root": "/home/uqyluo/github/KECOR-active-3Ddet",
+    "host": "gs618-8997",
+    "username": "uqyluo",
+    "executable": "/home/uqyluo/anaconda3/envs/active-3d/bin/python",
+    "cpu_count": 12,
+    "cpu_count_logical": 24,
+    "cpu_freq": {
+        "current": 3442.335416666667,
+        "min": 2200.0,
+        "max": 4000.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 4161.902,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2368.844,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 3440.301,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2346.707,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 3606.542,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4153.773,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4162.6,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 3910.676,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2360.51,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4130.536,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4124.67,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4190.948,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4002.422,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2375.115,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2439.809,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2383.281,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2844.436,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4145.868,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4155.84,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2432.163,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 2394.313,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4168.531,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4165.017,
+            "min": 2200.0,
+            "max": 4000.0
+        },
+        {
+            "current": 4151.246,
+            "min": 2200.0,
+            "max": 4000.0
+        }
+    ],
+    "disk": {
+        "total": 937.3305015563965,
+        "used": 509.84536361694336
+    },
+    "gpu": "NVIDIA RTX A6000",
+    "gpu_count": 2,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA RTX A6000",
+            "memory_total": 51527024640
+        },
+        {
+            "name": "NVIDIA RTX A6000",
+            "memory_total": 51527024640
+        }
+    ],
+    "memory": {
+        "total": 251.6110954284668
+    }
+}
